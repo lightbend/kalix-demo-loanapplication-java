@@ -1,0 +1,100 @@
+<templateSet group="kalix-es-java-loanapplication">
+  <template name="aheader" value="// This is the public API offered by your entity.&#10;syntax = &quot;proto3&quot;;&#10;&#10;import &quot;google/protobuf/empty.proto&quot;;&#10;import &quot;google/protobuf/timestamp.proto&quot;;&#10;import &quot;kalix/annotations.proto&quot;;&#10;import &quot;google/api/annotations.proto&quot;;&#10;&#10;package com.example.loanapp;&#10;&#10;option java_outer_classname = &quot;LoanAppApi&quot;;" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="astate" value="message LoanAppState {&#10;  string client_id = 1;&#10;  int64 client_monthly_income_cents = 2;&#10;&#10;  int64 loan_amount_cents = 3;&#10;  int32 loan_duration_months = 4;&#10;&#10;  LoanAppStatus status = 5;&#10;&#10;  string decline_reason = 6;&#10;&#10;  google.protobuf.Timestamp last_update_timestamp = 7;&#10;}&#10;&#10;enum LoanAppStatus {&#10;  STATUS_UNKNOWN = 0;&#10;  STATUS_IN_REVIEW = 1;&#10;  STATUS_APPROVED = 2;&#10;  STATUS_DECLINED = 3;&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="acmd" value="message SubmitCommand {&#10;  string loan_app_id = 1 [(kalix.field).entity_key = true];&#10;&#10;  string client_id = 2;&#10;  int64 client_monthly_income_cents = 6;&#10;&#10;  int64 loan_amount_cents = 7;&#10;  int32 loan_duration_months = 8;&#10;}&#10;&#10;message GetCommand {&#10;  string loan_app_id = 1 [(kalix.field).entity_key = true];&#10;}&#10;&#10;message ApproveCommand  {&#10;  string loan_app_id = 1 [(kalix.field).entity_key = true];&#10;}&#10;&#10;message DeclineCommand  {&#10;  string loan_app_id = 1 [(kalix.field).entity_key = true];&#10;  string reason = 2;&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="asrv" value="service LoanAppService {&#10;  &#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="afunc" value="rpc Submit(SubmitCommand) returns (google.protobuf.Empty) {&#10;    option (google.api.http) = {&#10;      post: &quot;/loanapp/{loan_app_id}&quot;&#10;      body: &quot;*&quot;&#10;    };&#10;  }&#10;  rpc Get(GetCommand) returns (LoanAppState) {&#10;    option (google.api.http) = {&#10;      get: &quot;/loanapp/{loan_app_id}&quot;&#10;    };&#10;  }&#10;&#10;  rpc Approve(ApproveCommand) returns (google.protobuf.Empty) {&#10;    option (google.api.http) = {&#10;      put: &quot;/loanapp/{loan_app_id}/approve&quot;&#10;    };&#10;  }&#10;&#10;  rpc Decline(DeclineCommand) returns (google.protobuf.Empty) {&#10;    option (google.api.http) = {&#10;      put: &quot;/loanapp/{loan_app_id}/decline&quot;&#10;      body: &quot;*&quot;&#10;    };&#10;  }" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="acodegen" value="  option (kalix.codegen) = {&#10;    event_sourced_entity: {&#10;      name: &quot;com.example.loanapp.domain.LoanAppEntity&quot;&#10;      entity_type: &quot;loanapp&quot;&#10;      state: &quot;com.example.loanapp.domain.LoanAppDomainState&quot;&#10;      events: [&#10;        &quot;com.example.loanapp.domain.Submitted&quot;,&#10;        &quot;com.example.loanapp.domain.Approved&quot;,&#10;        &quot;com.example.loanapp.domain.Declined&quot;&#10;      ]&#10;    }&#10;  };" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="dheader" value="syntax = &quot;proto3&quot;;&#10;&#10;import &quot;google/protobuf/timestamp.proto&quot;;&#10;package com.example.loanapp.domain;&#10;&#10;option java_outer_classname = &quot;LoanAppDomain&quot;;" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="dstate" value="message LoanAppDomainState {&#10;  string client_id = 1;&#10;  int64 client_monthly_income_cents = 2;&#10;&#10;  int64 loan_amount_cents = 3;&#10;  int32 loan_duration_months = 4;&#10;&#10;  LoanAppDomainStatus status = 5;&#10;&#10;  string decline_reason = 6;&#10;&#10;  google.protobuf.Timestamp last_update_timestamp = 7;&#10;}&#10;enum LoanAppDomainStatus {&#10;  STATUS_UNKNOWN = 0;&#10;  STATUS_IN_REVIEW = 1;&#10;  STATUS_APPROVED = 2;&#10;  STATUS_DECLINED = 3;&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="devts" value="message Submitted {&#10;  string loan_app_id = 1;&#10;  string client_id = 2;&#10;  int64 client_monthly_income_cents = 3;&#10;&#10;  int64 loan_amount_cents = 4;&#10;  int32 loan_duration_months = 5;&#10;&#10;  google.protobuf.Timestamp event_timestamp = 6;&#10;}&#10;&#10;message Approved {&#10;  string loan_app_id = 1;&#10;  google.protobuf.Timestamp event_timestamp = 2;&#10;}&#10;&#10;message Declined {&#10;  string loan_app_id = 1;&#10;  string reason = 2;&#10;  google.protobuf.Timestamp event_timestamp = 3;&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="eall" value="public static final String ERROR_NOT_FOUND = &quot;Not found&quot;;&#10;public static final String ERROR_WRONG_STATUS = &quot;Wrong status&quot;;&#10;&#10;@Override&#10;public LoanAppDomain.LoanAppDomainState emptyState() {&#10;    return LoanAppDomain.LoanAppDomainState.getDefaultInstance();&#10;}&#10;&#10;@Override&#10;public Effect&lt;Empty&gt; submit(LoanAppDomain.LoanAppDomainState currentState, LoanAppApi.SubmitCommand submitCommand) {&#10;    if (currentState.equals(LoanAppDomain.LoanAppDomainState.getDefaultInstance())) {&#10;        LoanAppDomain.Submitted event = LoanAppDomain.Submitted.newBuilder()&#10;                .setLoanAppId(submitCommand.getLoanAppId())&#10;                .setClientId(submitCommand.getClientId())&#10;                .setClientMonthlyIncomeCents(submitCommand.getClientMonthlyIncomeCents())&#10;                .setLoanAmountCents(submitCommand.getLoanAmountCents())&#10;                .setLoanDurationMonths(submitCommand.getLoanDurationMonths())&#10;                .setEventTimestamp(com.google.protobuf.util.Timestamps.fromMillis(System.currentTimeMillis()))&#10;                .build();&#10;        return effects().emitEvent(event).thenReply(__ -&gt; Empty.getDefaultInstance());&#10;    } else if (currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_IN_REVIEW) {&#10;        return effects().reply(Empty.getDefaultInstance());&#10;    } else {&#10;        return effects().error(ERROR_WRONG_STATUS);&#10;    }&#10;}&#10;&#10;@Override&#10;public Effect&lt;LoanAppApi.LoanAppState&gt; get(LoanAppDomain.LoanAppDomainState currentState, LoanAppApi.GetCommand getCommand) {&#10;    if(currentState.equals(LoanAppDomain.LoanAppDomainState.getDefaultInstance()))&#10;        return effects().error(ERROR_NOT_FOUND);&#10;    return effects().reply(map(currentState));&#10;}&#10;&#10;private LoanAppApi.LoanAppState map(LoanAppDomain.LoanAppDomainState state){&#10;    return  LoanAppApi.LoanAppState.newBuilder()&#10;            .setClientId(state.getClientId())&#10;            .setClientMonthlyIncomeCents(state.getClientMonthlyIncomeCents())&#10;            .setLoanAmountCents(state.getLoanAmountCents())&#10;            .setLoanDurationMonths(state.getLoanDurationMonths())&#10;            .setLastUpdateTimestamp(state.getLastUpdateTimestamp())&#10;            .setStatus(map(state.getStatus()))&#10;            .setDeclineReason(state.getDeclineReason())&#10;            .build();&#10;}&#10;private LoanAppApi.LoanAppStatus map(LoanAppDomain.LoanAppDomainStatus status){&#10;    return LoanAppApi.LoanAppStatus.forNumber(status.getNumber());&#10;}&#10;&#10;@Override&#10;public Effect&lt;Empty&gt; approve(LoanAppDomain.LoanAppDomainState currentState, LoanAppApi.ApproveCommand approveCommand) {&#10;    if(currentState.equals(LoanAppDomain.LoanAppDomainState.getDefaultInstance()))&#10;        return effects().error(ERROR_NOT_FOUND);&#10;    if(currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_IN_REVIEW){&#10;        LoanAppDomain.Approved event = LoanAppDomain.Approved.newBuilder()&#10;                .setLoanAppId(approveCommand.getLoanAppId())&#10;                .setEventTimestamp(com.google.protobuf.util.Timestamps.fromMillis(System.currentTimeMillis())).build();&#10;        return effects().emitEvent(event).thenReply(__ -&gt; Empty.getDefaultInstance());&#10;&#10;    }else if(currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_APPROVED)&#10;        return effects().reply(Empty.getDefaultInstance());&#10;    else&#10;        return effects().error(ERROR_WRONG_STATUS);&#10;}&#10;&#10;@Override&#10;public Effect&lt;Empty&gt; decline(LoanAppDomain.LoanAppDomainState currentState, LoanAppApi.DeclineCommand declineCommand) {&#10;    if(currentState.equals(LoanAppDomain.LoanAppDomainState.getDefaultInstance()))&#10;        return effects().error(ERROR_NOT_FOUND);&#10;    if(currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_IN_REVIEW){&#10;        LoanAppDomain.Declined event = LoanAppDomain.Declined.newBuilder()&#10;                .setLoanAppId(declineCommand.getLoanAppId())&#10;                .setReason(declineCommand.getReason())&#10;                .setEventTimestamp(com.google.protobuf.util.Timestamps.fromMillis(System.currentTimeMillis())).build();&#10;        return effects().emitEvent(event).thenReply(__ -&gt; Empty.getDefaultInstance());&#10;&#10;    }else if(currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_DECLINED)&#10;        return effects().reply(Empty.getDefaultInstance());&#10;    else&#10;        return effects().error(ERROR_WRONG_STATUS);&#10;}&#10;&#10;@Override&#10;public LoanAppDomain.LoanAppDomainState submitted(LoanAppDomain.LoanAppDomainState currentState, LoanAppDomain.Submitted submitted) {&#10;    return LoanAppDomain.LoanAppDomainState.newBuilder()&#10;            .setClientId(submitted.getClientId())&#10;            .setClientMonthlyIncomeCents(submitted.getClientMonthlyIncomeCents())&#10;            .setLoanAmountCents(submitted.getLoanAmountCents())&#10;            .setLoanDurationMonths(submitted.getLoanDurationMonths())&#10;            .setLastUpdateTimestamp(submitted.getEventTimestamp())&#10;            .setStatus(LoanAppDomain.LoanAppDomainStatus.STATUS_IN_REVIEW)&#10;            .build();&#10;}&#10;@Override&#10;public LoanAppDomain.LoanAppDomainState approved(LoanAppDomain.LoanAppDomainState currentState, LoanAppDomain.Approved approved) {&#10;    return currentState.toBuilder().setStatus(LoanAppDomain.LoanAppDomainStatus.STATUS_APPROVED).setLastUpdateTimestamp(approved.getEventTimestamp()).build();&#10;}&#10;@Override&#10;public LoanAppDomain.LoanAppDomainState declined(LoanAppDomain.LoanAppDomainState currentState, LoanAppDomain.Declined declined) {&#10;    return currentState.toBuilder().setStatus(LoanAppDomain.LoanAppDomainStatus.STATUS_DECLINED).setDeclineReason(declined.getReason()).setLastUpdateTimestamp(declined.getEventTimestamp()).build();&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="ut" value="@Test&#10;public void happyPath() {&#10;    String loanAppId = java.util.UUID.randomUUID().toString();&#10;    LoanAppEntityTestKit testKit = LoanAppEntityTestKit.of(loanAppId,LoanAppEntity::new);&#10;&#10;    submitLoan(testKit,loanAppId);&#10;    EventSourcedResult&lt;Empty&gt; result = testKit.approve(LoanAppApi.ApproveCommand.newBuilder().setLoanAppId(loanAppId).build());&#10;    LoanAppDomain.Approved event = result.getNextEventOfType(LoanAppDomain.Approved.class);&#10;    assertEquals(event.getLoanAppId(),loanAppId);&#10;    assertGet(testKit,loanAppId, LoanAppApi.LoanAppStatus.STATUS_APPROVED);&#10;}&#10;&#10;private void submitLoan(LoanAppEntityTestKit testKit,String loanAppId){&#10;    EventSourcedResult&lt;Empty&gt; result = testKit.submit(create(loanAppId));&#10;    LoanAppDomain.Submitted event = result.getNextEventOfType(LoanAppDomain.Submitted.class);&#10;    assertEquals(event.getLoanAppId(),loanAppId);&#10;    assertGet(testKit,loanAppId, LoanAppApi.LoanAppStatus.STATUS_IN_REVIEW);&#10;}&#10;&#10;private LoanAppApi.SubmitCommand create(String loanAppId){&#10;    return create(loanAppId,1000,500,24);&#10;}&#10;private LoanAppApi.SubmitCommand create(String loanAppId, long monthlyIncomeCents, long loanAmountCents, int loanDurationMonths){&#10;    return LoanAppApi.SubmitCommand.newBuilder()&#10;            .setLoanAppId(loanAppId)&#10;            .setClientId(java.util.UUID.randomUUID().toString())&#10;            .setClientMonthlyIncomeCents(monthlyIncomeCents)&#10;            .setLoanAmountCents(loanAmountCents)&#10;            .setLoanDurationMonths(loanDurationMonths)&#10;            .build();&#10;}&#10;&#10;private void assertGet(LoanAppEntityTestKit testKit,String loanAppId, LoanAppApi.LoanAppStatus status){&#10;    EventSourcedResult&lt;LoanAppApi.LoanAppState&gt; getResult = testKit.get(LoanAppApi.GetCommand.newBuilder().setLoanAppId(loanAppId).build());&#10;    assertFalse(getResult.didEmitEvents());&#10;    assertEquals(status,getResult.getReply().getStatus());&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="it" value="@Test&#10;public void happyPath() throws Exception {&#10;    String loanAppId = java.util.UUID.randomUUID().toString();&#10;    client.submit(create(loanAppId)).toCompletableFuture().get(5, SECONDS);&#10;    assertGet(loanAppId, LoanAppApi.LoanAppStatus.STATUS_IN_REVIEW);&#10;    client.approve(LoanAppApi.ApproveCommand.newBuilder().setLoanAppId(loanAppId).build()).toCompletableFuture().get(5, SECONDS);&#10;    assertGet(loanAppId, LoanAppApi.LoanAppStatus.STATUS_APPROVED);&#10;}&#10;&#10;private LoanAppApi.SubmitCommand create(String loanAppId, long monthlyIncomeCents, long loanAmountCents, int loanDurationMonths){&#10;    return LoanAppApi.SubmitCommand.newBuilder()&#10;            .setLoanAppId(loanAppId)&#10;            .setClientId(java.util.UUID.randomUUID().toString())&#10;            .setClientMonthlyIncomeCents(monthlyIncomeCents)&#10;            .setLoanAmountCents(loanAmountCents)&#10;            .setLoanDurationMonths(loanDurationMonths)&#10;            .build();&#10;}&#10;private LoanAppApi.SubmitCommand create(String loanAppId){&#10;    return create(loanAppId,1000,500,24);&#10;}&#10;&#10;private void assertGet(String loanAppId, LoanAppApi.LoanAppStatus status) throws Exception{&#10;    LoanAppApi.LoanAppState loanApp = client.get(LoanAppApi.GetCommand.newBuilder().setLoanAppId(loanAppId).build()).toCompletableFuture().get(5,SECONDS);&#10;    org.junit.Assert.assertNotNull(loanApp);&#10;    org.junit.Assert.assertEquals(status,loanApp.getStatus());&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="theader" value="syntax = &quot;proto3&quot;;&#10;&#10;package com.example.loanapp;&#10;&#10;import &quot;google/api/annotations.proto&quot;;&#10;import &quot;google/protobuf/any.proto&quot;;&#10;import &quot;google/protobuf/empty.proto&quot;;&#10;import &quot;google/protobuf/timestamp.proto&quot;;&#10;import &quot;kalix/annotations.proto&quot;;&#10;&#10;import &quot;com/example/loanapp/domain/loan_app_domain.proto&quot;;&#10;&#10;option java_outer_classname = &quot;LoanAppToTopicApi&quot;;" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="tevts" value="message ApprovedTopic {&#10;  string loan_app_id = 1;&#10;  google.protobuf.Timestamp event_timestamp = 2;&#10;}&#10;&#10;message DeclinedTopic {&#10;  string loan_app_id = 1;&#10;  string reason = 2;&#10;  google.protobuf.Timestamp event_timestamp = 3;&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="tsrv" value="service LoanAppToTopic {&#10;&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="tfunc" value="option (kalix.codegen) = {&#10;    action: {}&#10;  };&#10;&#10;  rpc OnApproved(domain.Approved) returns (ApprovedTopic) {&#10;    option (kalix.method).eventing.in = {&#10;      event_sourced_entity: &quot;loanapp&quot;&#10;    };&#10;    option (kalix.method).eventing.out = {&#10;      topic:  &quot;loanapp-topic&quot;&#10;    };&#10;  }&#10;&#10;  rpc OnDeclined(domain.Declined) returns (DeclinedTopic) {&#10;    option (kalix.method).eventing.in = {&#10;      event_sourced_entity: &quot;loanapp&quot;&#10;    };&#10;    option (kalix.method).eventing.out = {&#10;      topic:  &quot;loanapp-topic&quot;&#10;    };&#10;  }&#10;&#10;  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {&#10;    option (kalix.method).eventing.in = {&#10;      event_sourced_entity: &quot;loanapp&quot;&#10;    };&#10;  }" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="PROTO" value="true" />
+      <option name="PROTOTEXT" value="true" />
+    </context>
+  </template>
+  <template name="tall" value="@Override&#10;public Effect&lt;LoanAppToTopicApi.ApprovedTopic&gt; onApproved(LoanAppDomain.Approved approved) {&#10;    LoanAppToTopicApi.ApprovedTopic topicEvent = LoanAppToTopicApi.ApprovedTopic.newBuilder()&#10;            .setLoanAppId(approved.getLoanAppId())&#10;            .setEventTimestamp(approved.getEventTimestamp())&#10;            .build();&#10;    return effects().reply(topicEvent);&#10;}&#10;@Override&#10;public Effect&lt;LoanAppToTopicApi.DeclinedTopic&gt; onDeclined(LoanAppDomain.Declined declined) {&#10;    LoanAppToTopicApi.DeclinedTopic topicEvent = LoanAppToTopicApi.DeclinedTopic.newBuilder()&#10;            .setLoanAppId(declined.getLoanAppId())&#10;            .setReason(declined.getReason())&#10;            .setEventTimestamp(declined.getEventTimestamp())&#10;            .build();&#10;    return effects().reply(topicEvent);&#10;}&#10;@Override&#10;public Effect&lt;Empty&gt; ignoreOtherEvents(Any any) {&#10;    return effects().reply(Empty.getDefaultInstance());&#10;}" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>
